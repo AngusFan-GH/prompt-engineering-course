@@ -1,0 +1,17 @@
+# Agent Engineering Course Dependencies
+
+# Core
+openai>=1.0.0
+tiktoken>=0.5.0
+asyncio-atexit>=0.1.0
+
+# Optional: for local model support
+# vllm>=0.2.0
+# transformers>=4.30.0
+
+# Optional: for vector store
+# chromadb>=0.4.0
+# faiss-cpu>=1.7.4
+
+# Utilities
+python-dateutil>=2.8.0
