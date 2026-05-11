@@ -1,4 +1,4 @@
-# 驾驭工程（Agent Engineering）课程
+# 驾驭工程（Harness Engineering）课程
 
 > 面向软件学院本科生/研究生的技术教程
 
@@ -7,7 +7,7 @@
 ## 目录
 
 1. [核心概念定义](#1-核心概念定义)
-2. [AI Agent架构与实现](#2-ai-agent架构与实现)
+2. [AI Harness架构与实现](#2-ai-agent架构与实现)
 3. [多步骤任务编排与工具调用](#3-多步骤任务编排与工具调用)
 4. [输出质量控制与验证](#4-输出质量控制与验证)
 5. [实际代码案例](#5-实际代码案例)
@@ -19,7 +19,7 @@
 
 ### 1.1 什么是驾驭工程
 
-**驾驭工程（Agent Engineering）** 是指设计、构建和管理AI Agent（人工智能代理）的系统性方法，使AI系统能够自主理解目标、规划和执行多步骤任务、调用外部工具、并在复杂环境中做出合理决策。
+**驾驭工程（Harness Engineering）** 是指围绕大语言模型或 AI Agent 构建“可控执行外壳”的系统性工程方法。它不只关注 Agent 本身的推理能力，还关注任务编排、工具路由、状态管理、权限与护栏、评估、可观测性和人工接管，使 AI 系统能够在真实业务环境中稳定、可审计、可回滚地完成复杂任务。
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -40,7 +40,17 @@
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 1.2 AI Agent 的核心要素
+### 1.2 Harness Engineering vs Agent Engineering
+
+| 维度 | Agent Engineering | Harness Engineering |
+|------|-------------------|---------------------|
+| 核心对象 | 自主 Agent 的推理、计划和行动 | 包裹模型/Agent 的执行外壳与控制面 |
+| 重点问题 | Agent 能不能完成任务 | Agent 如何被约束、评估、追踪和安全运行 |
+| 关键模块 | Planner、Memory、Tools、Executor | Orchestrator、Policy、Tool Router、Guardrails、Evals、Tracing |
+| 典型产物 | ReAct Agent、Plan-and-Execute Agent | 可审计的 AI 工作流、工具调用沙箱、评估集、人工审批链 |
+| 教学目标 | 理解 Agent 行为模式 | 学会把 Agent 放进可靠工程系统中运行 |
+
+### 1.2 AI Harness 的核心要素
 
 | 要素 | 描述 | 作用 |
 |------|------|------|
@@ -51,7 +61,7 @@
 | **执行器 (Executor)** | 协调任务执行、处理异常 | 任务调度、流程控制 |
 | **验证器 (Validator)** | 检验输出质量、确保符合预期 | 质量保证 |
 
-### 1.3 Agent vs 传统程序
+### 1.3 Harness vs 传统程序
 
 ```
 传统程序:
@@ -74,7 +84,7 @@ AI Agent:
 
 ---
 
-## 2. AI Agent架构与实现
+## 2. AI Harness架构与实现
 
 ### 2.1 ReAct 模式（Reasoning + Acting）
 
@@ -125,10 +135,10 @@ Plan-and-Execute（计划-执行）模式将任务处理分为两个阶段：
 │  │   for each step in plan:                             │  │
 │  │       执行步骤 → 验证结果 → 动态调整 → 继续/回退      │  │
 │  └──────────────────────────────────────────────────────┘  │
-└───────────────────────────────────────────────────────┘
+└───────────────────────────────────────────────────────────────┘
 ```
 
-### 2.3 Agent 架构对比
+### 2.3 Harness 架构对比
 
 | 模式 | 适用场景 | 优点 | 缺点 |
 |------|----------|------|------|
@@ -143,6 +153,8 @@ Plan-and-Execute（计划-执行）模式将任务处理分为两个阶段：
 ### 3.1 任务编排的核心概念
 
 **任务图（Task Graph）**：用有向无环图（DAG）表示任务间的依赖关系。
+
+### 3.2 任务图实现
 
 ```python
 """
@@ -272,7 +284,6 @@ class TaskGraph:
             except Exception as e:
                 task.status = TaskStatus.FAILED
                 task.error = str(e)
-                # 可以选择继续执行或停止
                 print(f"Task {task_id} failed: {e}")
         
         return results
@@ -322,7 +333,7 @@ if __name__ == "__main__":
     demo_task_graph()
 ```
 
-### 3.2 工具调用系统设计
+### 3.3 工具调用系统设计
 
 ```python
 """
@@ -1581,6 +1592,7 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Callable, Any
 from enum import Enum
 import json
+import re
 
 
 class Intent(Enum):
@@ -1635,28 +1647,21 @@ class SmartCustomerService:
     
     def _search_product(self, query: str, category: str = None) -> Dict:
         """搜索商品"""
-        # 模拟数据库
         products = [
             {"id": "P001", "name": "iPhone 15 Pro", "price": 7999, "stock": 100},
             {"id": "P002", "name": "MacBook Pro 14", "price": 15999, "stock": 50},
             {"id": "P003", "name": "AirPods Pro", "price": 1899, "stock": 200},
         ]
-        
         results = [p for p in products if query.lower() in p["name"].lower()]
-        if category:
-            results = [p for p in results if p.get("category") == category]
-        
         return {"count": len(results), "products": results}
     
     def _get_order_status(self, order_id: str) -> Dict:
         """查询订单状态"""
-        # 模拟订单数据
         orders = {
             "ORD001": {"status": "shipped", "eta": "2024-01-15", "tracking": "SF123456"},
             "ORD002": {"status": "processing", "eta": None, "tracking": None},
             "ORD003": {"status": "delivered", "eta": "2024-01-10", "tracking": "SF789012"},
         }
-        
         if order_id in orders:
             return {"order_id": order_id, **orders[order_id]}
         return {"error": f"Order {order_id} not found"}
@@ -1717,7 +1722,6 @@ class SmartCustomerService:
     
     def handle_product_query(self, user_input: str) -> str:
         """处理商品查询"""
-        # 提取商品关键词
         query = user_input.replace("商品", "").replace("产品", "").replace("有没有", "").strip()
         
         if not query:
@@ -1729,7 +1733,7 @@ class SmartCustomerService:
             return f"抱歉，没有找到与'{query}'相关的商品，请尝试其他关键词。"
         
         response = f"为您找到 {result['count']} 件商品:\n"
-        for p in result["products"][:3]:  # 最多显示3个
+        for p in result["products"][:3]:
             stock_status = "有货" if p["stock"] > 0 else "缺货"
             response += f"\n📦 {p['name']}\n   价格: ¥{p['price']} | 库存: {stock_status}\n"
         
@@ -1737,8 +1741,6 @@ class SmartCustomerService:
     
     def handle_order_status(self, user_input: str) -> str:
         """处理订单查询"""
-        # 简化：直接使用用户输入中的订单号
-        import re
         order_match = re.search(r'ORD\d+', user_input)
         
         if order_match:
@@ -1768,8 +1770,6 @@ class SmartCustomerService:
     
     def handle_return_request(self, user_input: str) -> str:
         """处理退换货请求"""
-        # 检查是否提供了订单号
-        import re
         order_match = re.search(r'ORD\d+', user_input)
         
         if not order_match:
@@ -1777,11 +1777,9 @@ class SmartCustomerService:
         
         order_id = order_match.group()
         
-        # 检查是否说明了原因
         if "原因" not in user_input and "为什么" not in user_input:
             return f"好的，订单 {order_id} 要退货，请问是什么原因呢？"
         
-        # 提取原因（简化）
         reasons = ["质量问题", "不想要了", "与描述不符", "发错了"]
         reason = next((r for r in reasons if r in user_input), "用户原因")
         
@@ -1803,17 +1801,11 @@ class SmartCustomerService:
         responses = [
             "我理解您的问题。请问能否说得更具体一些？",
             "这个问题我不太确定，让我为您转接人工客服...",
-            "您可以尝试这样操作：1. 2. 3."
         ]
         return responses[self.context.turn_count % len(responses)]
     
     def process(self, user_input: str) -> str:
-        """
-        处理用户输入
-        
-        这是一个简化的同步版本，用于教学演示。
-        实际生产环境应使用异步处理和更复杂的NLU。
-        """
+        """处理用户输入"""
         self.context.turn_count += 1
         
         # 情感分析
@@ -1906,16 +1898,6 @@ class DataFormat(Enum):
 
 
 @dataclass
-class DataSource:
-    """数据源"""
-    name: str
-    path: str
-    format: DataFormat = DataFormat.UNKNOWN
-    size: int = 0
-    row_count: int = 0
-
-
-@dataclass
 class ProcessingStep:
     """处理步骤"""
     name: str
@@ -1963,7 +1945,7 @@ class DataPipelineAgent:
             return {
                 "valid": len(issues) == 0,
                 "total_rows": len(data),
-                "issues": issues[:10]  # 最多返回10个问题
+                "issues": issues[:10]
             }
         
         def clean_data(data: List[Dict]) -> List[Dict]:
@@ -1972,10 +1954,8 @@ class DataPipelineAgent:
             for row in data:
                 cleaned_row = {}
                 for key, value in row.items():
-                    # 去除首尾空白
                     if isinstance(value, str):
                         value = value.strip()
-                    # 跳过空值
                     if value != "" and value is not None:
                         cleaned_row[key] = value
                 if cleaned_row:
@@ -1991,7 +1971,6 @@ class DataPipelineAgent:
             if not data:
                 return {"count": 0}
             
-            # 简单的数值字段聚合
             numeric_fields = {}
             for row in data:
                 for key, value in row.items():
@@ -2034,7 +2013,6 @@ class DataPipelineAgent:
             
             return report
         
-        # 注册处理器
         self.processors["validate"] = ProcessingStep(
             name="validate",
             description="验证数据完整性和格式",
@@ -2066,14 +2044,6 @@ class DataPipelineAgent:
             output_format=DataFormat.JSON,
             handler=aggregate_data
         )
-        
-        self.processors["report"] = ProcessingStep(
-            name="report",
-            description="生成处理报告",
-            input_format=DataFormat.CSV,
-            output_format=DataFormat.JSON,
-            handler=lambda data: (data, {})  # 特殊处理
-        )
     
     def detect_format(self, file_path: str) -> DataFormat:
         """检测数据格式"""
@@ -2098,7 +2068,6 @@ class DataPipelineAgent:
             values = [v.strip() for v in line.split(',')]
             if len(values) == len(headers):
                 row = dict(zip(headers, values))
-                # 类型转换
                 for k, v in row.items():
                     try:
                         row[k] = int(v)
@@ -2112,16 +2081,10 @@ class DataPipelineAgent:
         return data
     
     def generate_pipeline(self, request: str) -> List[str]:
-        """
-        根据请求生成处理管道
-        
-        简化实现：基于关键词匹配
-        实际应用应使用LLM进行意图分析和流程规划
-        """
+        """根据请求生成处理管道"""
         request_lower = request.lower()
         pipeline = []
         
-        # 基础流程
         pipeline.append("validate")
         
         if "清洗" in request or "clean" in request_lower:
@@ -2132,9 +2095,6 @@ class DataPipelineAgent:
         
         if "json" in request_lower:
             pipeline.append("to_json")
-        
-        if "报告" in request or "report" in request_lower:
-            pipeline.append("report")
         
         return pipeline if pipeline else ["validate", "clean"]
     
@@ -2151,26 +2111,19 @@ class DataPipelineAgent:
         
         for step_name in pipeline:
             if step_name not in self.processors:
-                print(f"[警告] 未知步骤: {step_name}")
                 continue
             
             step = self.processors[step_name]
             print(f"[{step.name}] {step.description}...")
             
             try:
-                if step_name == "report":
-                    # 报告生成需要数据和统计
-                    output = step.handler(current_data, stats)
-                    results[step_name] = output
-                else:
-                    output = step.handler(current_data)
-                    results[step_name] = output
-                    
-                    # 收集统计信息
-                    if isinstance(output, dict) and "total_rows" in output:
-                        stats[f"{step_name}_rows"] = output["total_rows"]
-                    elif isinstance(output, list):
-                        stats[f"{step_name}_rows"] = len(output)
+                output = step.handler(current_data)
+                results[step_name] = output
+                
+                if isinstance(output, dict) and "total_rows" in output:
+                    stats[f"{step_name}_rows"] = output["total_rows"]
+                elif isinstance(output, list):
+                    stats[f"{step_name}_rows"] = len(output)
                 
                 current_data = output
                 print(f"[{step.name}] 完成")
@@ -2213,8 +2166,8 @@ async def demo_data_pipeline():
     
     # 生成并执行管道
     requests = [
-        "验证并清洗数据，然后生成报告",
-        "分析数据并进行统计汇总",
+        "验证并清洗数据",
+        "统计数据",
     ]
     
     for request in requests:
@@ -2225,11 +2178,6 @@ async def demo_data_pipeline():
         result = await agent.execute_pipeline(data, pipeline)
         
         print(f"\n统计: {result['stats']}")
-        
-        if "report" in result['results']:
-            report = result['results']['report']
-            if isinstance(report, str):
-                print(f"\n报告预览:\n{report[:500]}...")
 
 
 if __name__ == "__main__":
@@ -2288,7 +2236,7 @@ class Literature:
     title: str
     authors: List[str]
     year: int
-    venue: str = ""  # 发表场所
+    venue: str = ""
     abstract: str = ""
     citations: int = 0
     url: str = ""
@@ -2320,7 +2268,7 @@ class ResearchAssistant:
     def __init__(self):
         self.tools = self._register_tools()
         self.literature_db: List[Literature] = []
-        self.notes: Dict[str, str] = {}  # 笔记存储
+        self.notes: Dict[str, str] = {}
         self._load_sample_literature()
     
     def _register_tools(self) -> Dict[str, Callable]:
@@ -2356,24 +2304,6 @@ class ResearchAssistant:
                 keywords=["BERT", "pre-training", "NLP"]
             ),
             Literature(
-                title="GPT-3: Language Models are Few-Shot Learners",
-                authors=["Brown", "Mann", "Ryder"],
-                year=2020,
-                venue="NeurIPS",
-                abstract="We demonstrate that scaling up language models greatly improves task-agnostic performance.",
-                citations=30000,
-                keywords=["GPT-3", "few-shot", "language model"]
-            ),
-            Literature(
-                title="Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
-                authors=["Wei", "Wang", "Schuurmans"],
-                year=2022,
-                venue="NeurIPS",
-                abstract="We explore how generating a chain of thought can improve reasoning abilities.",
-                citations=8000,
-                keywords=["chain-of-thought", "reasoning", "prompting"]
-            ),
-            Literature(
                 title="ReAct: Synergizing Reasoning and Acting in Language Models",
                 authors=["Yao", "Zhao", "Yu"],
                 year=2023,
@@ -2391,7 +2321,6 @@ class ResearchAssistant:
         
         scored = []
         for lit in self.literature_db:
-            # 计算相关性得分
             score = 0
             lit_text = f"{lit.title} {lit.abstract} {' '.join(lit.keywords)}".lower()
             
@@ -2405,7 +2334,6 @@ class ResearchAssistant:
                 scored.append((score, lit))
         
         scored.sort(key=lambda x: x[0], reverse=True)
-        
         results = [lit.to_dict() for _, lit in scored[:max_results]]
         return results
     
@@ -2427,14 +2355,13 @@ class ResearchAssistant:
     
     def _generate_outline(self, topic: str, num_sections: int = 5) -> List[str]:
         """生成大纲"""
-        # 简化实现
         return [
             f"1. {topic}概述",
             f"2. {topic}的核心概念",
             f"3. {topic}的主要方法",
             f"4. {topic}的应用场景",
             f"5. {topic}的未来发展方向",
-            f"6. 参考文献"
+            "6. 参考文献"
         ]
     
     def _write_section(self, section_title: str, context: Dict = None) -> str:
@@ -2443,24 +2370,19 @@ class ResearchAssistant:
 ## {section_title}
 
 这部分内容将详细讨论{section_title}相关的主题。
-（实际实现中，这里会调用LLM生成完整内容）
 
-### 3.1 背景介绍
+### 背景介绍
 介绍{section_title}的研究背景和意义。
 
-### 3.2 主要方法
+### 主要方法
 详细描述主要的方法和技术。
 
-### 3.3 案例分析
+### 案例分析
 通过具体案例说明应用。
 """
     
     async def research_task(self, task_description: str) -> Dict[str, Any]:
-        """
-        执行研究任务
-        
-        这是一个综合性的研究任务流程
-        """
+        """执行研究任务"""
         print(f"\n{'='*60}")
         print(f"开始研究任务: {task_description}")
         print(f"{'='*60}\n")
@@ -2492,20 +2414,9 @@ class ResearchAssistant:
         # 步骤3: 整理笔记
         print("[步骤3] 整理研究笔记...")
         note_key = f"research_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-        note_content = f"""
-研究主题: {topic}
-相关文献数: {len(papers)}
-关键文献: {papers[0]['title'] if papers else 'N/A'}
-
-主要发现:
-- [待补充]
-- [待补充]
-
-研究空白:
-- [待补充]
-"""
+        note_content = f"研究主题: {topic}\n相关文献数: {len(papers)}\n关键文献: {papers[0]['title'] if papers else 'N/A'}"
         self._take_notes(note_key, note_content)
-        results["steps"].append({"step": "notes_taken", "note_key": note_key})
+        results["steps"].append({"step": "notes_taken"})
         
         # 步骤4: 生成大纲
         print("[步骤4] 生成文献综述大纲...")
@@ -2513,36 +2424,18 @@ class ResearchAssistant:
         results["outline"] = outline
         results["steps"].append({"step": "outline_generated"})
         
-        print("\n生成的文献综述大纲:")
+        print("\n生成的大纲:")
         for item in outline:
             print(f"  {item}")
-        
-        # 步骤5: 生成综述内容（部分）
-        print("\n[步骤5] 生成综述内容（样例）...")
-        section = self._write_section(f"{topic}研究综述", {"papers": papers})
-        results["section_content"] = section
-        results["steps"].append({"step": "content_generated"})
-        
-        results["status"] = "completed"
         
         return results
 
 
-# ==================== 演示 ====================
-
 async def demo_research_assistant():
     """研究助手演示"""
-    
     assistant = ResearchAssistant()
-    
-    # 执行研究任务
-    result = await assistant.research_task("研究大语言模型Agent架构")
-    
-    print("\n" + "="*60)
-    print("研究任务完成!")
-    print("="*60)
-    print(f"\n找到文献: {len(result.get('papers', []))}")
-    print(f"生成大纲: {len(result.get('outline', []))} 个章节")
+    result = await assistant.research_task("研究LLM Agent架构")
+    print(f"\n研究任务完成! 共 {len(result['steps'])} 个步骤")
 
 
 if __name__ == "__main__":
@@ -2551,56 +2444,54 @@ if __name__ == "__main__":
 
 ---
 
-## 附录：课程代码运行指南
+## 附录：扩展学习资源
 
-### 环境准备
+### 核心模式对比
 
-```bash
-# 创建虚拟环境
-python -m venv agent-env
-source agent-env/bin/activate  # Linux/Mac
-# agent-env\Scripts\activate  # Windows
-
-# 安装依赖
-pip install openai tiktoken asyncio
-```
+| 模式 | 核心思想 | 适用场景 | 代表框架 |
+|------|----------|----------|----------|
+| **ReAct** | 推理与行动交替 | 交互式、探索性任务 | LangChain ReAct |
+| **Plan-and-Execute** | 先规划后执行 | 复杂但可预测的任务 | BabyAGI, AutoPlan |
+| **Self-Reflection** | 反思与改进 | 需要自我修正的任务 | Reflexion |
+| **Tool-Augmented** | 工具扩展能力 | 需要外部交互的任务 | ChatGPT Plugins |
 
 ### 代码文件结构
 
 ```
-agent-engineering-course/
-├── README.md              # 课程文档
+harness-engineering-course/
+├── README.md                    # 课程主文档
+├── docs/
+│   └── README.md                # 详细教程文档
 ├── examples/
 │   ├── 01_react_agent.py       # ReAct Agent实现
 │   ├── 02_plan_execute.py      # Plan-and-Execute实现
 │   ├── 03_tool_system.py       # 工具调用系统
 │   ├── 04_validation.py        # 输出验证系统
-│   └── 05_teaching_cases.py    # 教学案例
-└── utils/
-    ├── llm_client.py      # LLM客户端
-    └── __init__.py
+│   ├── 05_teaching_cases.py    # 教学案例
+│   ├── 06_harness_runtime.py   # Harness运行时、护栏、追踪与评估
+│   └── harness_engineering_complete.ipynb # 完整课堂演示Notebook
+├── utils/
+│   ├── llm_client.py           # LLM客户端
+│   └── __init__.py
+├── config.py                    # 配置文件
+└── requirements.txt             # 依赖包
 ```
 
-### 运行示例
+### 快速上手
 
 ```bash
-# 运行ReAct Agent演示
+# 安装依赖
+pip install -r requirements.txt
+
+# 运行示例
 python examples/01_react_agent.py
-
-# 运行Plan-and-Execute演示
 python examples/02_plan_execute.py
-
-# 运行教学案例
 python examples/05_teaching_cases.py
+python examples/06_harness_runtime.py
+jupyter notebook examples/harness_engineering_complete.ipynb
 ```
 
 ---
 
-**课程结束**
-
-掌握以上内容后，学生将能够：
-1. 理解AI Agent的核心概念和架构模式
-2. 实现ReAct和Plan-and-Execute等Agent模式
-3. 设计和使用工具调用系统
-4. 实现输出质量控制和验证
-5. 构建实用的AI Agent应用
+> 本文档由 Harness Engineering 课程生成，用于教学目的。
+> 如有问题，请联系课程助教。

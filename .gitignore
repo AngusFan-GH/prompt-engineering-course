@@ -41,6 +41,10 @@ ENV/
 .DS_Store
 Thumbs.db
 
+# Office temporary files
+.~*
+~$*
+
 # Logs
 *.log
 logs/

@@ -1575,6 +1575,32 @@ CUSTOMER_SERVICE_PROMPT = """【角色】
 1. 基础概念 → 2. 上下文管理 → 3. RAG技术 → 4. 注入优化 → 5. 实战项目
 ```
 
+### Jupyter 演示
+
+新增完整演示 Notebook：
+
+```bash
+jupyter notebook examples/context_engineering_complete.ipynb
+```
+
+Notebook 覆盖：
+
+1. 上下文块建模与优先级排序
+2. Token 预算和上下文窗口选择
+3. 短期记忆、长期记忆与回忆
+4. 简化 RAG：切分、检索、注入
+5. 上下文压缩与质量评估
+6. 上下文类型分层：Input、Runtime、Compression、Isolation、Long-term Memory
+7. RAG 检索评估：Hit Rate、MRR
+8. 引用、新鲜度与冲突检查
+
+### 扩展案例建议
+
+- **课程问答机器人**：教材、PPT、FAQ 作为检索语料，演示“只基于资料回答”。
+- **论文阅读助手**：按章节检索，压缩摘要，并标注引用来源。
+- **编程助教**：把代码片段、错误日志、历史尝试组织进上下文。
+- **项目记忆助手**：短期记忆保存当前任务，长期记忆保存项目约束和用户偏好。
+
 ### 参考资源
 
 - 课程源码：`/root/context-engineering-course/`
