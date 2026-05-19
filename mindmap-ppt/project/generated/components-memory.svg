@@ -1,0 +1,36 @@
+<svg width="1280" height="800" viewBox="0 0 1280 800" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1280" height="800" fill="#fffdf8"/>
+  <text x="96" y="105" font-family="Arial, sans-serif" font-size="40" font-weight="700" fill="#183a4a">Tools · Skills · Memory</text>
+  <text x="98" y="150" font-family="Arial, sans-serif" font-size="24" fill="#4f6f78">三类组件组合成可执行、可复用、可持续的 Harness</text>
+  <g transform="translate(150 245)" font-family="Arial, sans-serif" text-anchor="middle">
+    <rect x="0" y="0" width="250" height="190" rx="8" fill="#183a4a"/>
+    <text x="125" y="70" font-size="34" font-weight="700" fill="#fffdf8">Tools</text>
+    <text x="125" y="118" font-size="22" fill="#eef7f3">能做什么</text>
+    <text x="125" y="155" font-size="20" fill="#eef7f3">Schema + Handler</text>
+  </g>
+  <g transform="translate(515 245)" font-family="Arial, sans-serif" text-anchor="middle">
+    <rect x="0" y="0" width="250" height="190" rx="8" fill="#eef7f3" stroke="#183a4a" stroke-width="4"/>
+    <text x="125" y="70" font-size="34" font-weight="700" fill="#183a4a">Skills</text>
+    <text x="125" y="118" font-size="22" fill="#4f6f78">如何做更好</text>
+    <text x="125" y="155" font-size="20" fill="#4f6f78">步骤 + 反模式</text>
+  </g>
+  <g transform="translate(880 245)" font-family="Arial, sans-serif" text-anchor="middle">
+    <rect x="0" y="0" width="250" height="190" rx="8" fill="#fffdf8" stroke="#183a4a" stroke-width="4"/>
+    <text x="125" y="70" font-size="34" font-weight="700" fill="#183a4a">Memory</text>
+    <text x="125" y="118" font-size="22" fill="#4f6f78">记住什么</text>
+    <text x="125" y="155" font-size="20" fill="#4f6f78">上下文 + 持久化</text>
+  </g>
+  <g stroke="#d8894f" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M415 340H500"/>
+    <path d="M485 320L505 340L485 360"/>
+    <path d="M780 340H865"/>
+    <path d="M850 320L870 340L850 360"/>
+    <path d="M1005 455C900 600 395 600 275 455"/>
+    <path d="M275 455L310 470M275 455L285 492"/>
+  </g>
+  <g transform="translate(220 560)" font-family="Arial, sans-serif">
+    <rect width="840" height="92" rx="8" fill="#eef7f3" stroke="#183a4a" stroke-width="3"/>
+    <text x="36" y="38" font-size="24" font-weight="700" fill="#183a4a">闭环关系</text>
+    <text x="36" y="70" font-size="22" fill="#4f6f78">Skills 选择策略，Tools 执行操作，Memory 提供上下文并沉淀结果。</text>
+  </g>
+</svg>

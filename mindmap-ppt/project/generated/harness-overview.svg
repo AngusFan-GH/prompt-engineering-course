@@ -1,0 +1,52 @@
+<svg width="1280" height="800" viewBox="0 0 1280 800" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1280" height="800" fill="#fffdf8"/>
+  <g stroke="#eef7f3" stroke-width="2">
+    <path d="M0 120H1280M0 240H1280M0 360H1280M0 480H1280M0 600H1280M0 720H1280"/>
+    <path d="M160 0V800M320 0V800M480 0V800M640 0V800M800 0V800M960 0V800M1120 0V800"/>
+  </g>
+  <text x="96" y="112" font-family="Arial, sans-serif" font-size="42" font-weight="700" fill="#183a4a">AI Harness Engineering</text>
+  <text x="98" y="162" font-family="Arial, sans-serif" font-size="26" fill="#4f6f78">把 LLM 包装成可执行、可控、可观察的 Agent 工程系统</text>
+  <g transform="translate(120 250)">
+    <rect x="0" y="0" width="230" height="160" rx="8" fill="#183a4a"/>
+    <text x="115" y="72" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#fffdf8">LLM</text>
+    <text x="115" y="112" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#eef7f3">推理与生成</text>
+  </g>
+  <g transform="translate(465 205)">
+    <rect x="0" y="0" width="350" height="250" rx="8" fill="#eef7f3" stroke="#183a4a" stroke-width="4"/>
+    <text x="175" y="58" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#183a4a">Harness</text>
+    <g fill="#fffdf8" stroke="#d8894f" stroke-width="3">
+      <rect x="45" y="95" width="115" height="54" rx="8"/>
+      <rect x="190" y="95" width="115" height="54" rx="8"/>
+      <rect x="45" y="170" width="115" height="54" rx="8"/>
+      <rect x="190" y="170" width="115" height="54" rx="8"/>
+    </g>
+    <g font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#183a4a" text-anchor="middle">
+      <text x="102" y="130">Tools</text>
+      <text x="247" y="130">Skills</text>
+      <text x="102" y="205">Memory</text>
+      <text x="247" y="205">Safety</text>
+    </g>
+  </g>
+  <g transform="translate(930 250)">
+    <rect x="0" y="0" width="230" height="160" rx="8" fill="#eef7f3" stroke="#183a4a" stroke-width="4"/>
+    <text x="115" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#183a4a">Agent</text>
+    <text x="115" y="112" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#4f6f78">目标驱动执行</text>
+  </g>
+  <g stroke="#d8894f" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M360 330H440"/>
+    <path d="M420 310L442 330L420 350"/>
+    <path d="M835 330H905"/>
+    <path d="M885 310L907 330L885 350"/>
+  </g>
+  <g transform="translate(210 565)" font-family="Arial, sans-serif" text-anchor="middle">
+    <circle cx="0" cy="0" r="42" fill="#eef7f3" stroke="#183a4a" stroke-width="3"/>
+    <circle cx="220" cy="0" r="42" fill="#eef7f3" stroke="#183a4a" stroke-width="3"/>
+    <circle cx="440" cy="0" r="42" fill="#eef7f3" stroke="#183a4a" stroke-width="3"/>
+    <circle cx="660" cy="0" r="42" fill="#eef7f3" stroke="#183a4a" stroke-width="3"/>
+    <text x="0" y="8" font-size="20" font-weight="700" fill="#183a4a">观察</text>
+    <text x="220" y="8" font-size="20" font-weight="700" fill="#183a4a">选择</text>
+    <text x="440" y="8" font-size="20" font-weight="700" fill="#183a4a">执行</text>
+    <text x="660" y="8" font-size="20" font-weight="700" fill="#183a4a">反馈</text>
+    <path d="M52 0H168M272 0H388M492 0H608" stroke="#d8894f" stroke-width="4"/>
+  </g>
+</svg>

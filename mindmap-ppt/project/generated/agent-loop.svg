@@ -1,0 +1,43 @@
+<svg width="1280" height="800" viewBox="0 0 1280 800" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1280" height="800" fill="#fffdf8"/>
+  <text x="94" y="105" font-family="Arial, sans-serif" font-size="40" font-weight="700" fill="#183a4a">Agent Loop 执行循环</text>
+  <text x="96" y="150" font-family="Arial, sans-serif" font-size="24" fill="#4f6f78">构建提示、调用模型、解析响应、执行工具，再回到上下文</text>
+  <g transform="translate(640 400)" font-family="Arial, sans-serif" text-anchor="middle">
+    <circle cx="0" cy="0" r="235" fill="#eef7f3" stroke="#183a4a" stroke-width="4"/>
+    <g fill="#fffdf8" stroke="#183a4a" stroke-width="3">
+      <rect x="-105" y="-285" width="210" height="72" rx="8"/>
+      <rect x="170" y="-40" width="210" height="72" rx="8"/>
+      <rect x="-105" y="212" width="210" height="72" rx="8"/>
+      <rect x="-380" y="-40" width="210" height="72" rx="8"/>
+    </g>
+    <g font-size="24" font-weight="700" fill="#183a4a">
+      <text x="0" y="-240">构建提示</text>
+      <text x="275" y="5">调用模型</text>
+      <text x="0" y="258">解析响应</text>
+      <text x="-275" y="5">执行工具</text>
+    </g>
+    <rect x="-125" y="-45" width="250" height="90" rx="8" fill="#183a4a"/>
+    <text x="0" y="-8" font-size="28" font-weight="700" fill="#fffdf8">消息历史</text>
+    <text x="0" y="28" font-size="20" fill="#eef7f3">压缩与截断</text>
+  </g>
+  <g stroke="#d8894f" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M690 178C810 210 890 300 913 390"/>
+    <path d="M910 390L890 358M910 390L935 360"/>
+    <path d="M875 450C835 560 745 630 650 638"/>
+    <path d="M650 638L685 620M650 638L680 663"/>
+    <path d="M590 638C480 612 395 526 365 432"/>
+    <path d="M365 432L390 462M365 432L340 462"/>
+    <path d="M365 365C395 260 485 190 590 178"/>
+    <path d="M590 178L558 200M590 178L560 154"/>
+  </g>
+  <g transform="translate(94 645)" font-family="Arial, sans-serif">
+    <rect width="310" height="86" rx="8" fill="#183a4a"/>
+    <text x="24" y="36" font-size="22" font-weight="700" fill="#fffdf8">防无限循环</text>
+    <text x="24" y="66" font-size="20" fill="#eef7f3">设置最大迭代次数</text>
+  </g>
+  <g transform="translate(875 645)" font-family="Arial, sans-serif">
+    <rect width="310" height="86" rx="8" fill="#eef7f3" stroke="#183a4a" stroke-width="3"/>
+    <text x="24" y="36" font-size="22" font-weight="700" fill="#183a4a">工具结果</text>
+    <text x="24" y="66" font-size="20" fill="#4f6f78">追加到消息列表</text>
+  </g>
+</svg>
